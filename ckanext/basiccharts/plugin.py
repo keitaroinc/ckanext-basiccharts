@@ -3,6 +3,7 @@ import json
 import collections
 
 import ckan.plugins as p
+import ckan.lib.helpers as h
 
 import ckantoolkit as tk
 _ = tk._
@@ -212,7 +213,11 @@ def _view_data(resource_view):
 
 def parse_filter_params():
     filters = collections.defaultdict(list)
-    filter_string = p.toolkit.request.args.get('filters', '')
+    filter_string = ''
+    if [int(i) for i in h.ckan_version().split('.')] >= [2, 9, 0]:
+        filter_string = p.toolkit.request.args.get('filters', '')
+    else:
+        filter_string = dict(p.toolkit.request.GET).get('filters', '')
     for filter in filter_string.split('|'):
         if filter.count(':') != 1:
             continue
