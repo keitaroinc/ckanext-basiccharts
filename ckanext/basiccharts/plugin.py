@@ -161,7 +161,7 @@ class BasicGrid(p.SingletonPlugin):
                 }
 
     def can_view(self, data_dict):
-        return True
+        return data_dict['resource'].get('datastore_active', False)
 
     def view_template(self, context, data_dict):
         return 'basicgrid_view.html'
